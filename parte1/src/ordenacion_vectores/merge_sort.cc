@@ -66,6 +66,11 @@ Solucion* MergeSort::Combine(std::vector<Solucion*> soluciones) {
       solucion_final -> AddElemento(solucion_derecha -> GetElemento(i));
     }
   }
+
+  // Liberamos memoria
+  for (size_t i{0}; i < soluciones.size(); ++i) {
+    delete soluciones[i];
+  }
   
   return solucion_final;
 }

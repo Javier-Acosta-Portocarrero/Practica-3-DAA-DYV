@@ -96,6 +96,9 @@ int main() {
     EscritorSolucionVector imprime_soluciones(*dynamic_cast<SolucionVector*>(solucion_aux));
     imprime_soluciones.Escribir();
     std::cout << std::endl;
+    // Liberamos memoria
+    delete entrada_aux;
+    delete solucion_aux;
   } else {
     std::cerr << "Opción no válida, abortando ejecución.";
     return 1;

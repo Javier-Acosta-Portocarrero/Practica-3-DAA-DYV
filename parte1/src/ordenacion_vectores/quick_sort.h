@@ -27,8 +27,6 @@ class QuickSort : public AlgoritmoDivideYVenceras {
   Solucion* Combine(std::vector<Solucion*> soluciones) override;
   Solucion* SolveSmall(Instancia* entrada) override;
   bool IsSmall(Instancia* entrada) override;
- private:
-  float EncontrarPivote(const InstanciaVector& instancia) const;
 };
 
 #endif
