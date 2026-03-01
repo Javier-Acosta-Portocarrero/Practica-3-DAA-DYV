@@ -22,7 +22,12 @@ class EscritorInstanciaVector {
   EscritorInstanciaVector() = default;
   EscritorInstanciaVector(InstanciaVector solucion) : instancia_{solucion} {}
 
+  /** @brief Método para establecer la instancia a escribir.
+   * 
+   * @param nueva_instancia Instancia que se desea escribir.
+   */
   void SetInstancia(const InstanciaVector& nueva_instancia) { instancia_ = nueva_instancia;}
+  /** @brief Método para escribir la instancia en la salida estándar. */
   void Escribir() const;                
 
  private:

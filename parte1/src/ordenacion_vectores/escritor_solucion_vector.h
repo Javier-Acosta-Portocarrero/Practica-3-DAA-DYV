@@ -22,7 +22,12 @@ class EscritorSolucionVector {
   EscritorSolucionVector() = default;
   EscritorSolucionVector(SolucionVector solucion) : solucion_{solucion} {}
 
+  /** @brief Método para establecer la solución a escribir.
+   * 
+   * @param nueva_solucion Solución que se desea escribir.
+   */
   void SetSolucion(const SolucionVector& nueva_solucion) { solucion_ = nueva_solucion;}
+  /** @brief Método para escribir la solución en la salida estándar. */
   void Escribir() const;                
 
  private:
