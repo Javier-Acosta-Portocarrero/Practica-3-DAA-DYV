@@ -58,7 +58,7 @@ int main() {
     std::vector<size_t> dimensiones{10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 
                                     300, 400, 500, 600 ,700, 800, 900, 1000};
     std::cout << "Dimension     Tiempo " << nombre_algoritmo << "\n";
-    // Bucle para cada dimensión a probar
+    // Bucle para cada dimensión a probar.
     for (size_t dimension : dimensiones) {
       entrada_aux = new InstanciaVector(GenerarVectorAleatorio(dimension));
       double duracion_total_algoritmo{0.0};
@@ -66,7 +66,7 @@ int main() {
       // Calculo del tiempo total de las num_iteraciones ejecuciones para posteriormente calcular 
       // la media y tener unos resultados más estables.
       for (int i{0}; i < num_iteraciones; i ++) {
-        // Tiempo de ejecución del algoritmo por filas
+        // Tiempo de ejecución del algoritmo.
         auto inicio = std::chrono::high_resolution_clock::now();
         solucion_aux = ordenacion_vectores -> Solve(entrada_aux);
         auto fin = std::chrono::high_resolution_clock::now();
