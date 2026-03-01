@@ -13,7 +13,7 @@
 #ifndef QUICK_SORT_H_
 #define QUICK_SORT_H_
 
-#include "./lib/algoritmo_divide_y_venceras.h"
+#include "../lib/algoritmo_divide_y_venceras.h"
 #include "instancia_vector.h"
 #include <vector>
 

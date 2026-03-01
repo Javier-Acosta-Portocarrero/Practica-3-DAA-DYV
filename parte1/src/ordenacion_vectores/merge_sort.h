@@ -10,10 +10,10 @@
 // Archivo merge_sort.h: fichero de declaración.
 // Contiene la declaración de la clase MergeSort.
 
-#ifndef QUICK_SORT_H_
-#define QUICK_SORT_H_
+#ifndef MERGE_SORT__
+#define MERGE_SORT_H_
 
-#include "./lib/algoritmo_divide_y_venceras.h"
+#include "../lib/algoritmo_divide_y_venceras.h"
 #include "instancia_vector.h"
 #include <vector>
 

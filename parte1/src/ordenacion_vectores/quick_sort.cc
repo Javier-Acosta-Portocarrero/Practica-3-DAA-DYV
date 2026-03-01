@@ -15,7 +15,10 @@
 #include "solucion_vector.h"
 #include <vector>
 
+#include <iostream>
+
 std::vector<Instancia*> QuickSort::Divide(Instancia* entrada) {
+  std::cout << "1\n";
   InstanciaVector* entrada_procesada = dynamic_cast<InstanciaVector*>(entrada);
   float pivote = EncontrarPivote(*entrada_procesada);
   std::vector<Instancia*> instancias;
@@ -35,18 +38,22 @@ std::vector<Instancia*> QuickSort::Divide(Instancia* entrada) {
 }
 
 Solucion* QuickSort::Combine(std::vector<Solucion*> soluciones) {
+  std::cout << "2\n";
   SolucionVector* primera_solucion_procesada = dynamic_cast<SolucionVector*>(soluciones[0]);
   SolucionVector* segunda_solucion_procesada = dynamic_cast<SolucionVector*>(soluciones[1]);
-
   // Admite pasarle por el constructor una instancia para convertirla en una solución
-  SolucionVector* solucion_final = new SolucionVector(*primera_solucion_procesada);
+  SolucionVector* solucion_final = new SolucionVector();
 
+  for (size_t i{0}; i < primera_solucion_procesada -> GetLongitud(); ++i) {
+    solucion_final -> AddElemento(primera_solucion_procesada -> GetElemento(i));
+  }
   for (size_t i{0}; i < segunda_solucion_procesada -> GetLongitud(); ++i) {
     solucion_final -> AddElemento(segunda_solucion_procesada -> GetElemento(i));
   }
 
-  delete primera_solucion_procesada;
-  delete segunda_solucion_procesada;
+  for (size_t i{0}; i < soluciones.size(); ++i) {
+    delete soluciones[i];
+  }
   return solucion_final;
 }
 
@@ -57,7 +64,7 @@ Solucion* QuickSort::SolveSmall(Instancia* entrada) {
 
 bool QuickSort::IsSmall(Instancia* entrada) {
   InstanciaVector* entrada_procesada = dynamic_cast<InstanciaVector*>(entrada);
-  return (entrada_procesada -> GetLongitud() == 1);
+  return (entrada_procesada -> GetLongitud() <= 1);
 }
 
 float QuickSort::EncontrarPivote(const InstanciaVector& instancia) const {

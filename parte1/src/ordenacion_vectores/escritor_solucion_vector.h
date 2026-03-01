@@ -8,10 +8,10 @@
 // Autor: Gabriel Gallardo Noda
 // Fecha: 28/02/2024
 // Archivo escritor_solucion_vector.h: fichero de declaración.
-// Contiene la declaración de la clase InstanciaVector.
+// Contiene la declaración de la clase EscritorSolucionVector.
 
-#ifndef ESCRITOR_SOLUCION_VECTOR_VECTOR_H_
-#define ESCRITOR_SOLUCION_VECTOR_VECTOR_H_
+#ifndef ESCRITOR_INSTANCIA_VECTOR_VECTOR_H_
+#define ESCRITOR_INSTANCIA_VECTOR_VECTOR_H_
 
 #include "solucion_vector.h"
 #include <vector>
