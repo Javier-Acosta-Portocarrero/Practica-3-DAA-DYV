@@ -24,12 +24,15 @@
   */
 class SolucionVector : public Solucion {
  public:
+  SolucionVector() = default;
   SolucionVector(const std::vector<float>& vector) : vector_(vector) {}
   SolucionVector(const InstanciaVector& instancia);
   ~SolucionVector() = default;
 
   float GetElemento(size_t index) const;
   size_t GetLongitud() const;
+
+  void AddElemento(float nuevo_elemento) { vector_.emplace_back(nuevo_elemento);}
 
  private:
   std::vector<float> vector_;

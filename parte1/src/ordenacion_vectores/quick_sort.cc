@@ -36,7 +36,18 @@ std::vector<Instancia*> QuickSort::Divide(Instancia* entrada) {
 
 Solucion* QuickSort::Combine(std::vector<Solucion*> soluciones) {
   SolucionVector* primera_solucion_procesada = dynamic_cast<SolucionVector*>(soluciones[0]);
-  SolucionVector* seguda_solucion_procesada = dynamic_cast<SolucionVector*>(soluciones[1]);
+  SolucionVector* segunda_solucion_procesada = dynamic_cast<SolucionVector*>(soluciones[1]);
+
+  // Admite pasarle por el constructor una instancia para convertirla en una solución
+  SolucionVector* solucion_final = new SolucionVector(*primera_solucion_procesada);
+
+  for (size_t i{0}; i < segunda_solucion_procesada -> GetLongitud(); ++i) {
+    solucion_final -> AddElemento(segunda_solucion_procesada -> GetElemento(i));
+  }
+
+  delete primera_solucion_procesada;
+  delete segunda_solucion_procesada;
+  return solucion_final;
 }
 
 Solucion* QuickSort::SolveSmall(Instancia* entrada) {
