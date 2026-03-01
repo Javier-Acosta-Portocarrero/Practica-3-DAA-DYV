@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <stdexcept>
 
-std::vector<std::vector<double>> GenerarVectorAleatorio(size_t dimension) {
+std::vector<float> GenerarVectorAleatorio(size_t dimension) {
   if (dimension <= 0) {
     throw std::invalid_argument("El vector a generar debe tener al menos un elemento.");
   } 

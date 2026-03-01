@@ -10,6 +10,6 @@
   * 
   * @param dimension Longitud del vector.
   */
-std::vector<std::vector<double>> GenerarVectorAleatorio(size_t dimension);
+std::vector<float> GenerarVectorAleatorio(size_t dimension);
 
 #endif
