@@ -3,12 +3,12 @@
 // Grado en Ingenieria Informatica
 // Asignatura: Diseño y Analisis de Algoritmos
 // Curso: 3º
-// Practica 2: Máquina RAM
+// Practica 3: Divide y Vencerás
 // Autor: Javier Acosta Portocarrero
 // Autor: Gabriel Gallardo Noda
 // Fecha: 28/02/2024
-// Archivo algoritmo_divide_y_venceras.h: fichero de definicion.
-// Contiene la definicion de la clase AlgoritmoDivideYVenceras.
+// Archivo algoritmo_divide_y_venceras.h: fichero de declaración.
+// Contiene la declaración de la clase AlgoritmoDivideYVenceras.
 
 #ifndef ALGORITMO_DIVIDE_Y_VENCERAS_H_
 #define ALGORITMO_DIVIDE_Y_VENCERAS_H_

@@ -7,8 +7,8 @@
 // Autor: Javier Acosta Portocarrero
 // Autor: Gabriel Gallardo Noda
 // Fecha: 28/02/2024
-// Archivo algoritmo.h: fichero de definicion.
-// Contiene la definicion de la clase Algoritmo.
+// Archivo algoritmo.h: fichero de declaración.
+// Contiene la definicion de las clases Algoritmo, Instancia y Solucion.
 
 #ifndef ALGORITMO_H_
 #define ALGORITMO_H_
