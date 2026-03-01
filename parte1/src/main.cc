@@ -1,6 +1,6 @@
 #include "funciones.h"
 #include "lib/algoritmo.h"
-#include "matrices/instancia_mult_matriz.h"
+#include "ordenacion_vectores/escritor_solucion_vector.h"
 #include "matrices/solucion_mult_matriz.h"
 #include "matrices/multiplicacion_columna.h"
 #include "matrices/multiplicacion_fila.h"
@@ -14,7 +14,7 @@
 int main() {
   // Inicializamos la semilla con la hora actual del ordenador
   std::srand(time(0));
-  // Usamos el contexto de operación de matrices que utiliza los diferentes algoritmos
+  // Usamos el contexto de ordenación de vector que utiliza los diferentes algoritmos
   OperacionMatriz multiplicacion_matrices{new MutiplicacionMatricesFila()};
   Instancia* entrada_aux = nullptr;
   Solucion* solucion_aux = nullptr;

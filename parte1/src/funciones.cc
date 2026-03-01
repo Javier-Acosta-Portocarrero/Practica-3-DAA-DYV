@@ -3,16 +3,14 @@
 #include <cstdlib>
 #include <stdexcept>
 
-std::vector<std::vector<double>> GenerarMatrizAleatoria(size_t filas, size_t columnas) {
-  if (filas <= 0 || columnas <= 0) {
-    throw std::invalid_argument("La matriz a generar debe tener al menos una fila y una columna");
+std::vector<std::vector<double>> GenerarVectorAleatorio(size_t dimension) {
+  if (dimension <= 0) {
+    throw std::invalid_argument("El vector a generar debe tener al menos un elemento.");
   } 
-  // Generamos la matriz con valores aleatorios
-  std::vector<std::vector<double>> matriz_aleatoria(filas, std::vector<double>(columnas, 0.0));
-  for (size_t i{0}; i < filas; i++) {
-    for (size_t j{0}; j < columnas; j++) {
-      matriz_aleatoria[i][j] = static_cast<double>(std::rand());
-    }
+  // Generamos el vector con elementos aleatorios.
+  std::vector<float> vector_aleatorio(dimension, 0);
+  for (size_t i{0}; i < dimension; i++) {
+    vector_aleatorio[i] = static_cast<float>(std::rand());
   }
-  return matriz_aleatoria;
+  return vector_aleatorio;
 }
