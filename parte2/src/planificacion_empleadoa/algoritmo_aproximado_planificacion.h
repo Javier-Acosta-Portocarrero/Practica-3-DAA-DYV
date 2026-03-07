@@ -1,0 +1,32 @@
+// Universidad de La Laguna
+// Escuela Superior de Ingenieria y Tecnologia
+// Grado en Ingenieria Informatica
+// Asignatura: Diseño y Analisis de Algoritmos
+// Curso: 3º
+// Practica 3: Divide y Vencerás
+// Autor: Javier Acosta Portocarrero
+// Autor: Gabriel Gallardo Noda
+// Fecha: 28/02/2024
+// Archivo quick_sort.h: fichero de declaración.
+// Contiene la declaración de la clase AlgoritmoAproximadoPlanificacion.
+
+#ifndef ALGORITMO_APROXIMADO_PLANIFICACION_H_
+#define ALGORITMO_APROXIMADO_PLANIFICACION_H_
+
+#include "../lib/algoritmo_divide_y_venceras.h"
+#include "instancia_planificacion_empleados.h"
+#include <vector>
+
+class AlgoritmoAproximadoPlanificacion : public AlgoritmoDivideYVenceras {
+ public:
+  AlgoritmoAproximadoPlanificacion() = default;
+  ~AlgoritmoAproximadoPlanificacion() = default;
+  
+ protected:
+  std::vector<Instancia*> Divide(Instancia* entrada) override;
+  Solucion* Combine(std::vector<Solucion*> soluciones) override;
+  Solucion* SolveSmall(Instancia* entrada) override;
+  bool IsSmall(Instancia* entrada) override;
+};
+
+#endif
