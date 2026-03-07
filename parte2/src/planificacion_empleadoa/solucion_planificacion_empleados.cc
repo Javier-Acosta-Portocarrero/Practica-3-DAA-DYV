@@ -12,6 +12,35 @@
 
 #include "solucion_planificacion_empleados.h"
 
+SolucionPlanificacionEmpleados::SolucionPlanificacionEmpleados(const InstanciaPlanificaciónEmpleados& instancia_base) {
+  empleados_ = instancia_base.GetNombresEmpleados();
+  turnos_ = instancia_base.GetNombresTurnos();
+  dias_a_planificar_ = instancia_base.GetCantidadDias();
+  descanso_minimo_empleado = instancia_base.GetDescansoEmpleados();
+  minimo_empleados_por_dia_turno = std::vector<std::vector<unsigned>>(dias_a_planificar_, 
+                                                                      std::vector<unsigned>(turnos_.size(), 0));
+  for (size_t dia{0}; dia < instancia_base.GetCantidadDias(); ++dia) {
+    for (size_t turno{0}; turno < instancia_base.GetCantidadTurnos(); ++turno) {
+      minimo_empleados_por_dia_turno[dia][turno] = instancia_base.GetMinimoEmpleados(dia, turno);
+    }
+  }
+  satisfaccion_por_empleado_dia_turno_ = std::vector<std::vector<std::vector<int>>>(empleados_.size(), 
+                                                            std::vector<std::vector<int>>(dias_a_planificar_,
+                                                            std::vector<int>(turnos_.size(), 0)));
+  for (size_t empleado{0}; empleado < instancia_base.GetCantidadEmpleados(); ++empleado) {
+    for (size_t dia{0}; dia < instancia_base.GetCantidadDias(); ++dia) {
+      for (size_t turno{0}; turno < instancia_base.GetCantidadTurnos(); ++turno) {
+        satisfaccion_por_empleado_dia_turno_[empleado][dia][turno] = instancia_base.GetSatisfaccion(empleado, 
+                                                                                                    dia, turno);
+      }
+    }
+  }
+  trabaja_empleado_dia_turno_ = std::vector<std::vector<std::vector<bool>>>(empleados_.size(), 
+                                                            std::vector<std::vector<bool>>(dias_a_planificar_, 
+                                                            std::vector<bool>(turnos_.size(), false)));
+  dias_trabajados_empleado_ = std::vector<unsigned>(empleados_.size(), 0);
+}
+
 SolucionPlanificacionEmpleados::SolucionPlanificacionEmpleados(const std::vector<std::string>& empleados, 
                                    const std::vector<std::vector<std::vector<bool>>>& trabaja_empleado_dia_turno,
                                    const std::vector<unsigned>& dias_trabajados_empleado, 

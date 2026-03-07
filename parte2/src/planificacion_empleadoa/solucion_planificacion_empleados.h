@@ -40,7 +40,6 @@ class SolucionPlanificacionEmpleados: public Solucion {
 
   inline bool TrabajaEmpleadoDia(size_t empleado, size_t dia) const;
   inline unsigned DiasTrabajadosEmpleado(size_t empleado) const;
-  unsigned EmpleadosTurno(size_t dia, size_t turno) const;
 
   void NuevoTrabajoTurno(size_t dia, size_t turno, size_t empleado);
 
@@ -56,6 +55,8 @@ class SolucionPlanificacionEmpleados: public Solucion {
   std::vector<std::vector<std::vector<int>>> satisfaccion_por_empleado_dia_turno_;
   std::vector<std::vector<unsigned>> minimo_empleados_por_dia_turno;
   std::vector<unsigned> descanso_minimo_empleado;
+
+  unsigned EmpleadosTurno(size_t dia, size_t turno) const;
 };
 
 #endif
