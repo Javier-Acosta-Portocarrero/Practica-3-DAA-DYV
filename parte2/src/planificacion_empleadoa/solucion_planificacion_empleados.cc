@@ -109,7 +109,6 @@ float SolucionPlanificacionEmpleados::GetValorObjetivo() const {
         }
       }
     }
-    return valor_objetivo;
   }
-  
+  return valor_objetivo;
 }
