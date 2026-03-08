@@ -7,7 +7,8 @@
 // Autor: Javier Acosta Portocarrero
 // Autor: Gabriel Gallardo Noda
 // Fecha: 07/03/2026
-// Archivo almacenar-solucion-planificacion.cc
+// Archivo almacenar-solucion-planificacion.cc: fichero de definición
+// Contiene la definición de la clase AlmacenarSolucionPlanificacionFichero
 
 #include "almacenar_solucion_planificacion_fichero.h"
 #include <fstream>
@@ -27,6 +28,7 @@ void AlmacenarSolucionPlanificacionFichero::Almacenar(const SolucionPlanificacio
   const auto& turnos = solucion.GetNombresTurnos();
   for (size_t dia = 0; dia < solucion.GetCantidadDias(); ++dia) {
     file << "Dia " << dia << "\n";
+    // Uso setw para que la salida no salga descentrada.
     file << std::setw(15) << "Empleado";
     for (size_t turno = 0; turno < solucion.GetCantidadTurnos(); ++turno) {
       file << std::setw(4) << turnos[turno];
@@ -35,6 +37,7 @@ void AlmacenarSolucionPlanificacionFichero::Almacenar(const SolucionPlanificacio
     for (size_t empleado = 0; empleado < solucion.GetCantidadEmpleados(); ++empleado) {
       file << std::setw(15) << empleados[empleado];
       for (size_t turno = 0; turno < solucion.GetCantidadTurnos(); ++turno) {
+        // Si el empleado trabaja en ese turno y día, mostramos una X, sino una O.
         char marca = solucion.TrabajaEmpleadoDiaTurno(empleado, dia, turno) ? 'X' : 'O';
         file << std::setw(4) << marca;
       }

@@ -16,33 +16,41 @@
 
 #include <limits>
 #include <stdexcept>
+#include <iostream>
 
 Solucion* AlgoritmoVorazPlanificacionDia::Solve(Instancia* entrada) {
+  //std::cout << "Resolviendo\n";
   InstanciaPlanificacionEmpleados* entrada_procesada = dynamic_cast<InstanciaPlanificacionEmpleados*>(entrada);
   if (entrada_procesada->GetCantidadDias() > 1) {
     throw std::logic_error("Este algoritmo solo se puede usar para instancias de tamaño 1.");
   }
-
+  //std::cout << "Resolviendo: " << entrada_procesada->GetCantidadDias() << std::endl;
   SolucionPlanificacionEmpleados* solucion_dia = new SolucionPlanificacionEmpleados(*entrada_procesada);
   size_t cantidad_empleados = solucion_dia->GetCantidadEmpleados();
   size_t cantidad_turnos = solucion_dia->GetCantidadTurnos();
+  //std::cout << "empleados: " << cantidad_empleados << " " << "turnos: " << cantidad_turnos << std::endl;
 
   // Primera pasada para cubrir empleados mínimos por turno.
   for (size_t turno{0}; turno < cantidad_turnos; ++turno) {
+    //std::cout << "a";
     const unsigned minimo_empleados{solucion_dia->GetMinimoEmpleados(0, turno)};
     while (solucion_dia->EmpleadosTurno(0, turno) < minimo_empleados) {
       // 0 porque solo hay un día, por lo que es el primero.
+      //std::cout << "3";
       int mejor_empleado_disponible{EncontrarMejorEmpleadoDisponible(solucion_dia, 0, turno)};
       // Si no había ningún empleado dispobile, el método devolvería -1.
       if (mejor_empleado_disponible == -1) {
         break;
       }
       solucion_dia->NuevoTrabajoTurno(0, turno, static_cast<size_t>(mejor_empleado_disponible));
+      //std::cout << "2";
     }
   }
   // Ahora simplemente asignamos los empleados sobrantes maximizando la satisfacción.
   for (size_t turno{0}; turno < cantidad_turnos; ++turno) {
+    //std::cout << "b";
     while (true) {
+      //std::cout << "4";
       int mejor_empleado_disponible = EncontrarMejorEmpleadoDisponible(solucion_dia, 0, turno);
       if (mejor_empleado_disponible == -1) {
         break;
@@ -52,6 +60,7 @@ Solucion* AlgoritmoVorazPlanificacionDia::Solve(Instancia* entrada) {
         break;
       }
       solucion_dia->NuevoTrabajoTurno(0, turno, static_cast<size_t>(mejor_empleado_disponible));
+      //std::cout << "1";
     }
   }
   return solucion_dia;  
@@ -63,15 +72,15 @@ int AlgoritmoVorazPlanificacionDia::EncontrarMejorEmpleadoDisponible(SolucionPla
   int satisfaccion_mejor_empleado_disponible{std::numeric_limits<int>::min()};
   // Si se devuelve -1 es que no hay ningún empleado disponible.
   int mejor_empleado_disponible{-1};
-  for (size_t empleado{0}; empleado < solucion->GetCantidadEmpleados(); ++empleado) {
-    const unsigned dias_a_descansar_empleado{solucion->DiasMinimosDescansoEmpleado(empleado)};
-    const unsigned dias_descansados_empleado{solucion->GetCantidadDias() - solucion->DiasTrabajadosEmpleado(empleado)};
-    if (!solucion->TrabajaEmpleadoDia(empleado, dia) && (dias_descansados_empleado > dias_a_descansar_empleado)) {
-      if (solucion->GetSatisfaccion(empleado, dia, turno) > satisfaccion_mejor_empleado_disponible) {
-        satisfaccion_mejor_empleado_disponible = solucion->GetSatisfaccion(empleado, dia, turno);
-        mejor_empleado_disponible = empleado;
-      }
+  size_t cantidad_empleados = solucion->GetCantidadEmpleados();
+  // Se busca el empleado disponible con mayor satisfacción para ese turno y día.
+  for (size_t empleado{0}; empleado < cantidad_empleados; ++empleado) {
+    if (!solucion->TrabajaEmpleadoDia(empleado, dia) && 
+        solucion->GetSatisfaccion(empleado, dia, turno) > satisfaccion_mejor_empleado_disponible) {
+      satisfaccion_mejor_empleado_disponible = solucion->GetSatisfaccion(empleado, dia, turno);
+      mejor_empleado_disponible = empleado;
     } 
   }
+  std::cout << "Mejor: " << mejor_empleado_disponible << std::endl;
   return mejor_empleado_disponible;
 }

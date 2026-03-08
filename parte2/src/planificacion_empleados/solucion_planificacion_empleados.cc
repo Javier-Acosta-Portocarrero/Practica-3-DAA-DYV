@@ -90,9 +90,12 @@ unsigned SolucionPlanificacionEmpleados::DiasTrabajadosEmpleado(size_t empleado)
 }
 
 void SolucionPlanificacionEmpleados::NuevoTrabajoTurno(size_t dia, size_t turno, size_t empleado) {
+  // si ya trabaja ese día no permitimos otro turno
+  if (TrabajaEmpleadoDia(empleado, dia)) {
+    return;
+  }
   if (!trabaja_empleado_dia_turno_[empleado][dia][turno]) {
     trabaja_empleado_dia_turno_[empleado][dia][turno] = true;
-    // No puede trabajar el mismo día en más de un turno.
     ++dias_trabajados_empleado_[empleado];
   }
 }
@@ -117,6 +120,8 @@ unsigned SolucionPlanificacionEmpleados::EmpleadosTurno(size_t dia, size_t turno
 
 float SolucionPlanificacionEmpleados::GetValorObjetivo() const {
   float valor_objetivo{0};
+  // Primero calculamos la si el turno tiene la cantidad mínima deseada de empleados,
+  // y después el sumatario de la satisfacción de los empleados.
   for (size_t dia{0}; dia < GetCantidadDias(); ++dia) {
     for (size_t turno{0}; turno < GetCantidadTurnos(); ++turno) {
       if (EmpleadosTurno(dia, turno) >= GetMinimoEmpleados(dia, turno)) {

@@ -7,7 +7,8 @@
 // Autor: Javier Acosta Portocarrero
 // Autor: Gabriel Gallardo Noda
 // Fecha: 07/03/2026
-// Archivo carga_instancia_planificacion.h
+// Archivo carga_instancia_planificacion.h: fichero de declaración
+// Contiene la declaración de la clase CargaInstanciaPlanificacion.
 
 #ifndef CARGA_INSTANCIA_PLANIFICACION_H_
 #define CARGA_INSTANCIA_PLANIFICACION_H_

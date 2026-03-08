@@ -7,7 +7,8 @@
 // Autor: Javier Acosta Portocarrero
 // Autor: Gabriel Gallardo Noda
 // Fecha: 07/03/2026
-// Archivo almacenar-solucion-planificacion.h
+// Archivo almacenar-solucion-planificacion.h: fichero de declaración
+// Contiene la declaración de la clase AlmacenarSolucionPlanificacionFichero
 
 #ifndef ALMACENAR_SOLUCION_PLANIFICACION_FICHERO_H_
 #define ALMACENAR_SOLUCION_PLANIFICACION_FICHERO_H_

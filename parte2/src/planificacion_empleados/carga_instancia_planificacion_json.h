@@ -7,7 +7,8 @@
 // Autor: Javier Acosta Portocarrero
 // Autor: Gabriel Gallardo Noda
 // Fecha: 07/03/2026
-// Archivo carga_instancia_planificacion_json.h
+// Archivo carga_instancia_planificacion_json.h: fichero de declaración
+// Contiene la declaración de la clase CargaInstanciaPlanificacionJson
 
 #ifndef CARGA_INSTANCIA_PLANIFICACION_JSON_H_
 #define CARGA_INSTANCIA_PLANIFICACION_JSON_H_
@@ -30,12 +31,6 @@ class CargaInstanciaPlanificacionJson : public CargaInstanciaPlanificacion {
 
  private:
   std::string json_path_;
-  std::string ReadFile();
-  std::vector<unsigned> ParseEmployeeFreeDays(const std::string& data);
-  void ParseSatisfaction(
-      const std::string& data,
-      std::vector<std::vector<std::vector<int>>>& satisfaccion);
-  void ParseRequiredEmployees(const std::string& data, std::vector<std::vector<unsigned>>& minimo_empleados);
 };
 
 #endif
