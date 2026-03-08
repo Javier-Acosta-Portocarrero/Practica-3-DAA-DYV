@@ -12,21 +12,24 @@
 
 #include "solucion_planificacion_empleados.h"
 
-SolucionPlanificacionEmpleados::SolucionPlanificacionEmpleados(const InstanciaPlanificaciónEmpleados& instancia_base) {
+SolucionPlanificacionEmpleados::SolucionPlanificacionEmpleados(const InstanciaPlanificacionEmpleados& instancia_base) {
   empleados_ = instancia_base.GetNombresEmpleados();
   turnos_ = instancia_base.GetNombresTurnos();
   dias_a_planificar_ = instancia_base.GetCantidadDias();
-  descanso_minimo_empleado = instancia_base.GetDescansoEmpleados();
-  minimo_empleados_por_dia_turno = std::vector<std::vector<unsigned>>(dias_a_planificar_, 
-                                                                      std::vector<unsigned>(turnos_.size(), 0));
+  descanso_minimo_empleados_ = instancia_base.GetDescansoEmpleados();
+  minimo_empleados_por_dia_turno_ = std::vector<std::vector<unsigned>>(
+      dias_a_planificar_, std::vector<unsigned>(turnos_.size(), 0));
+
   for (size_t dia{0}; dia < instancia_base.GetCantidadDias(); ++dia) {
     for (size_t turno{0}; turno < instancia_base.GetCantidadTurnos(); ++turno) {
-      minimo_empleados_por_dia_turno[dia][turno] = instancia_base.GetMinimoEmpleados(dia, turno);
+      minimo_empleados_por_dia_turno_[dia][turno] = instancia_base.GetMinimoEmpleados(dia, turno);
     }
   }
-  satisfaccion_por_empleado_dia_turno_ = std::vector<std::vector<std::vector<int>>>(empleados_.size(), 
-                                                            std::vector<std::vector<int>>(dias_a_planificar_,
-                                                            std::vector<int>(turnos_.size(), 0)));
+  satisfaccion_por_empleado_dia_turno_ = std::vector<std::vector<std::vector<int>>>(
+      empleados_.size(), 
+      std::vector<std::vector<int>>(dias_a_planificar_,
+      std::vector<int>(turnos_.size(), 0)));
+      
   for (size_t empleado{0}; empleado < instancia_base.GetCantidadEmpleados(); ++empleado) {
     for (size_t dia{0}; dia < instancia_base.GetCantidadDias(); ++dia) {
       for (size_t turno{0}; turno < instancia_base.GetCantidadTurnos(); ++turno) {
@@ -35,54 +38,70 @@ SolucionPlanificacionEmpleados::SolucionPlanificacionEmpleados(const InstanciaPl
       }
     }
   }
-  trabaja_empleado_dia_turno_ = std::vector<std::vector<std::vector<bool>>>(empleados_.size(), 
-                                                            std::vector<std::vector<bool>>(dias_a_planificar_, 
-                                                            std::vector<bool>(turnos_.size(), false)));
+  trabaja_empleado_dia_turno_ = std::vector<std::vector<std::vector<bool>>>(
+      empleados_.size(), std::vector<std::vector<bool>>(
+          dias_a_planificar_, std::vector<bool>(turnos_.size(), false)));
+
   dias_trabajados_empleado_ = std::vector<unsigned>(empleados_.size(), 0);
 }
 
-SolucionPlanificacionEmpleados::SolucionPlanificacionEmpleados(const std::vector<std::string>& empleados, 
-                                   const std::vector<std::vector<std::vector<bool>>>& trabaja_empleado_dia_turno,
-                                   const std::vector<unsigned>& dias_trabajados_empleado, 
-                                   const std::vector<std::string>& turnos, unsigned dias_a_planificar, 
-                                   const std::vector<std::vector<std::vector<int>>>& satisfaccion,
-                                   const std::vector<std::vector<unsigned>>& minimo_empleados, 
-                                   const std::vector<unsigned>& descansos) {
+SolucionPlanificacionEmpleados::SolucionPlanificacionEmpleados(
+    const std::vector<std::string>& empleados, 
+    const std::vector<std::vector<std::vector<bool>>>& trabaja_empleado_dia_turno,
+    const std::vector<unsigned>& dias_trabajados_empleado, 
+    const std::vector<std::string>& turnos, unsigned dias_a_planificar, 
+    const std::vector<std::vector<std::vector<int>>>& satisfaccion,
+    const std::vector<std::vector<unsigned>>& minimo_empleados, 
+    const std::vector<unsigned>& descansos) {
+
   empleados_ = empleados;
   trabaja_empleado_dia_turno_ = trabaja_empleado_dia_turno;
   dias_trabajados_empleado_ = dias_trabajados_empleado;
   turnos_ = turnos;
-  dias_a_planificar = dias_a_planificar;
-  minimo_empleados_por_dia_turno = minimo_empleados;
-  descanso_minimo_empleado = descansos;
+  dias_a_planificar_ = dias_a_planificar;
+  minimo_empleados_por_dia_turno_ = minimo_empleados;
+  descanso_minimo_empleados_ = descansos;
   satisfaccion_por_empleado_dia_turno_ = satisfaccion;
 }
 
-inline int SolucionPlanificacionEmpleados::GetSatisfaccion(size_t empleado, size_t dia, size_t turno) const {
+int SolucionPlanificacionEmpleados::GetSatisfaccion(size_t empleado, size_t dia, size_t turno) const {
   return satisfaccion_por_empleado_dia_turno_[empleado][dia][turno];
 }
 
-inline unsigned SolucionPlanificacionEmpleados::GetMinimoEmpleados(size_t dia, size_t turno) const {
-  return minimo_empleados_por_dia_turno[dia][turno];
+unsigned SolucionPlanificacionEmpleados::GetMinimoEmpleados(size_t dia, size_t turno) const {
+  return minimo_empleados_por_dia_turno_[dia][turno];
 }
 
-inline bool SolucionPlanificacionEmpleados::TrabajaEmpleadoDia(size_t empleado, size_t dia) const {
-  for (int i{0}; i < GetCantidadEmpleados(); ++i) {
-    if (trabaja_empleado_dia_turno_[empleado][dia][i]) {
+bool SolucionPlanificacionEmpleados::TrabajaEmpleadoDia(size_t empleado, size_t dia) const {
+  for (size_t turno{0}; turno < GetCantidadTurnos(); ++turno) {
+    if (trabaja_empleado_dia_turno_[empleado][dia][turno]) {
       return true;
     }
   }
   return false;
 }
 
-inline unsigned SolucionPlanificacionEmpleados::DiasTrabajadosEmpleado(size_t empleado) const {
+bool SolucionPlanificacionEmpleados::TrabajaEmpleadoDiaTurno(size_t empleado, size_t dia, size_t turno) const {
+  return trabaja_empleado_dia_turno_[empleado][dia][turno];
+}
+
+unsigned SolucionPlanificacionEmpleados::DiasTrabajadosEmpleado(size_t empleado) const {
   return dias_trabajados_empleado_[empleado];
 }
 
 void SolucionPlanificacionEmpleados::NuevoTrabajoTurno(size_t dia, size_t turno, size_t empleado) {
   if (!trabaja_empleado_dia_turno_[empleado][dia][turno]) {
-    trabaja_empleado_dia_turno_[empleado][dia][turno];
+    trabaja_empleado_dia_turno_[empleado][dia][turno] = true;
+    // No puede trabajar el mismo día en más de un turno.
     ++dias_trabajados_empleado_[empleado];
+  }
+}
+
+void SolucionPlanificacionEmpleados::LiberarTrabajoTurno(size_t dia, size_t turno, size_t empleado) {
+  if (trabaja_empleado_dia_turno_[empleado][dia][turno]) {
+    trabaja_empleado_dia_turno_[empleado][dia][turno] = false;
+    // No puede trabajar el mismo día en más de un turno.
+    --dias_trabajados_empleado_[empleado];
   }
 }
 
@@ -103,7 +122,7 @@ float SolucionPlanificacionEmpleados::GetValorObjetivo() const {
       if (EmpleadosTurno(dia, turno) >= GetMinimoEmpleados(dia, turno)) {
         valor_objetivo += 100;
       }
-      for (size_t empleado{0}; empleado < GetCantidadTurnos(); ++empleado) {
+      for (size_t empleado{0}; empleado < GetCantidadEmpleados(); ++empleado) {
         if (trabaja_empleado_dia_turno_[empleado][dia][turno]) {
           valor_objetivo += GetSatisfaccion(empleado, dia, turno);
         }

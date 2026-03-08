@@ -20,7 +20,7 @@
 
 class SolucionPlanificacionEmpleados: public Solucion {
  public:
-  SolucionPlanificacionEmpleados(const InstanciaPlanificaciónEmpleados& instancia_base);
+  SolucionPlanificacionEmpleados(const InstanciaPlanificacionEmpleados& instancia_base);
   SolucionPlanificacionEmpleados(const std::vector<std::string>& empleados,
                             const std::vector<std::vector<std::vector<bool>>>& trabaja_empleado_dia_turno,
                             const std::vector<unsigned>& dias_trabajados_empleado,
@@ -32,16 +32,21 @@ class SolucionPlanificacionEmpleados: public Solucion {
 
   inline const std::vector<std::string>& GetNombresEmpleados() const { return empleados_;}
   inline const std::vector<std::string>& GetNombresTurnos() const { return turnos_;}
+  inline const std::vector<unsigned>& GetDescansosEmpleados() const { return descanso_minimo_empleados_;}
   inline unsigned GetCantidadDias() const { return dias_a_planificar_;}
   inline size_t GetCantidadTurnos() const { return turnos_.size();} 
   inline size_t GetCantidadEmpleados() const { return empleados_.size();}
-  inline int GetSatisfaccion(size_t empleado, size_t dia, size_t turno) const;
-  inline unsigned GetMinimoEmpleados(size_t dia, size_t turno) const;
+  int GetSatisfaccion(size_t empleado, size_t dia, size_t turno) const;
+  unsigned GetMinimoEmpleados(size_t dia, size_t turno) const;
 
-  inline bool TrabajaEmpleadoDia(size_t empleado, size_t dia) const;
-  inline unsigned DiasTrabajadosEmpleado(size_t empleado) const;
+  bool TrabajaEmpleadoDia(size_t empleado, size_t dia) const;
+  bool TrabajaEmpleadoDiaTurno(size_t empleado, size_t dia, size_t turno) const;
+  unsigned DiasTrabajadosEmpleado(size_t empleado) const;
+  unsigned EmpleadosTurno(size_t dia, size_t turno) const;
+  inline unsigned DiasMinimosDescansoEmpleado(size_t empleado) const { return descanso_minimo_empleados_[empleado];}
 
   void NuevoTrabajoTurno(size_t dia, size_t turno, size_t empleado);
+  void LiberarTrabajoTurno(size_t dia, size_t turno, size_t empleado);
 
   float GetValorObjetivo() const;
 
@@ -53,10 +58,8 @@ class SolucionPlanificacionEmpleados: public Solucion {
   std::vector<std::string> turnos_;
   unsigned dias_a_planificar_ = 0;
   std::vector<std::vector<std::vector<int>>> satisfaccion_por_empleado_dia_turno_;
-  std::vector<std::vector<unsigned>> minimo_empleados_por_dia_turno;
-  std::vector<unsigned> descanso_minimo_empleado;
-
-  unsigned EmpleadosTurno(size_t dia, size_t turno) const;
+  std::vector<std::vector<unsigned>> minimo_empleados_por_dia_turno_;
+  std::vector<unsigned> descanso_minimo_empleados_;
 };
 
 #endif

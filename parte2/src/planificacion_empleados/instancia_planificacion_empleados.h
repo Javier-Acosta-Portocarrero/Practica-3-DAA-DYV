@@ -17,14 +17,14 @@
 #include <vector>
 #include <string>
 
-class InstanciaPlanificaciónEmpleados: public Instancia {
+class InstanciaPlanificacionEmpleados: public Instancia {
  public:
-  InstanciaPlanificaciónEmpleados(const std::vector<std::string>& empleados, const std::vector<std::string>& turnos_,
+  InstanciaPlanificacionEmpleados(const std::vector<std::string>& empleados, const std::vector<std::string>& turnos_,
                                   unsigned dias_a_planificar, 
                                   const std::vector<std::vector<std::vector<int>>>& satisfaccion,
                                   const std::vector<std::vector<unsigned>>& minimo_empleados, 
                                   const std::vector<unsigned>& descansos);
-  ~InstanciaPlanificaciónEmpleados() = default;
+  ~InstanciaPlanificacionEmpleados() = default;
 
   inline const std::vector<std::string>& GetNombresEmpleados() const { return empleados_;}
   inline const std::vector<std::string>& GetNombresTurnos() const { return turnos_;}
@@ -32,8 +32,8 @@ class InstanciaPlanificaciónEmpleados: public Instancia {
   inline unsigned GetCantidadDias() const { return dias_a_planificar_;}
   inline size_t GetCantidadTurnos() const { return turnos_.size();}
   inline size_t GetCantidadEmpleados() const { return empleados_.size();}
-  inline int GetSatisfaccion(size_t empleado, size_t dia, size_t turno) const;
-  inline unsigned GetMinimoEmpleados(size_t dia, size_t turno) const;
+  int GetSatisfaccion(size_t empleado, size_t dia, size_t turno) const;
+  unsigned GetMinimoEmpleados(size_t dia, size_t turno) const;
 
  private:
   std::vector<std::string> empleados_;
