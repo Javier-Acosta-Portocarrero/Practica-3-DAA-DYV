@@ -22,6 +22,8 @@ SolucionPlanificacionEmpleados* PlanificadorEmpleados::Planificar(InstanciaPlani
 }
 
 void PlanificadorEmpleados::SetEstrategia(Algoritmo* nueva_estrategia) {
-  delete estrategia_;
+  if (estrategia_ != nullptr) {
+    delete estrategia_;
+  }
   estrategia_ = nueva_estrategia;
 }
