@@ -20,6 +20,7 @@ Solucion* AlgoritmoDivideYVenceras::Solve(Instancia* entrada) {
   std::vector<Solucion*> soluciones;  
   for (Instancia* subinstancia : subinstancias) {
     soluciones.push_back(Solve(subinstancia));
+    delete subinstancia;
   }
     
   return Combine(soluciones);
