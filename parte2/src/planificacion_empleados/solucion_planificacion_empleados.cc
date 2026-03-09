@@ -16,6 +16,7 @@ SolucionPlanificacionEmpleados::SolucionPlanificacionEmpleados(const InstanciaPl
   empleados_ = instancia_base.GetNombresEmpleados();
   turnos_ = instancia_base.GetNombresTurnos();
   dias_a_planificar_ = instancia_base.GetCantidadDias();
+  dias_originales_ = instancia_base.GetCantidadDiasOriginales();
   descanso_minimo_empleados_ = instancia_base.GetDescansoEmpleados();
   minimo_empleados_por_dia_turno_ = std::vector<std::vector<unsigned>>(
       dias_a_planificar_, std::vector<unsigned>(turnos_.size(), 0));
@@ -49,7 +50,8 @@ SolucionPlanificacionEmpleados::SolucionPlanificacionEmpleados(
     const std::vector<std::string>& empleados, 
     const std::vector<std::vector<std::vector<bool>>>& trabaja_empleado_dia_turno,
     const std::vector<unsigned>& dias_trabajados_empleado, 
-    const std::vector<std::string>& turnos, unsigned dias_a_planificar, 
+    const std::vector<std::string>& turnos, 
+    unsigned dias_a_planificar, unsigned dias_originales,
     const std::vector<std::vector<std::vector<int>>>& satisfaccion,
     const std::vector<std::vector<unsigned>>& minimo_empleados, 
     const std::vector<unsigned>& descansos) {
@@ -59,6 +61,7 @@ SolucionPlanificacionEmpleados::SolucionPlanificacionEmpleados(
   dias_trabajados_empleado_ = dias_trabajados_empleado;
   turnos_ = turnos;
   dias_a_planificar_ = dias_a_planificar;
+  dias_originales_ = dias_originales;
   minimo_empleados_por_dia_turno_ = minimo_empleados;
   descanso_minimo_empleados_ = descansos;
   satisfaccion_por_empleado_dia_turno_ = satisfaccion;

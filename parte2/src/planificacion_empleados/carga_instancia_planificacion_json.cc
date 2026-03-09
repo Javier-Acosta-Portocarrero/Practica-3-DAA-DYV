@@ -66,6 +66,7 @@ InstanciaPlanificacionEmpleados* CargaInstanciaPlanificacionJson::Load() {
       empleados,
       turnos,
       dias,
+      dias,
       satisfaccion,
       minimo_empleados,
       free_days);

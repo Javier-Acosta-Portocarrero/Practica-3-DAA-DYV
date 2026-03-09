@@ -33,6 +33,7 @@ class AlgoritmoAproximadoPlanificacion : public AlgoritmoDivideYVenceras {
  private:
   Algoritmo* algoritmo_small_ = nullptr;
 
+  std::pair<int, int> EncontrarPeorDiaTrabajdoNoMinimo(unsigned empleado, SolucionPlanificacionEmpleados* solucion);
   std::pair<unsigned, unsigned> EncontrarPeorDiaTrabajado(unsigned empleado, SolucionPlanificacionEmpleados* solucion);
 };
 

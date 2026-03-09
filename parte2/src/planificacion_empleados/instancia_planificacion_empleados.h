@@ -20,7 +20,7 @@
 class InstanciaPlanificacionEmpleados: public Instancia {
  public:
   InstanciaPlanificacionEmpleados(const std::vector<std::string>& empleados, const std::vector<std::string>& turnos_,
-                                  unsigned dias_a_planificar, 
+                                  unsigned dias_a_planificar, unsigned dias_originales,
                                   const std::vector<std::vector<std::vector<int>>>& satisfaccion,
                                   const std::vector<std::vector<unsigned>>& minimo_empleados, 
                                   const std::vector<unsigned>& descansos);
@@ -30,6 +30,7 @@ class InstanciaPlanificacionEmpleados: public Instancia {
   inline const std::vector<std::string>& GetNombresTurnos() const { return turnos_;}
   inline const std::vector<unsigned>& GetDescansoEmpleados() const { return descanso_minimo_empleado;}
   inline unsigned GetCantidadDias() const { return dias_a_planificar_;}
+  inline unsigned GetCantidadDiasOriginales() const { return dias_originales_;}
   inline size_t GetCantidadTurnos() const { return turnos_.size();}
   inline size_t GetCantidadEmpleados() const { return empleados_.size();}
   int GetSatisfaccion(size_t empleado, size_t dia, size_t turno) const;
@@ -39,6 +40,7 @@ class InstanciaPlanificacionEmpleados: public Instancia {
   std::vector<std::string> empleados_;
   std::vector<std::string> turnos_;
   unsigned dias_a_planificar_ = 0;
+  unsigned dias_originales_ = 0;
   std::vector<std::vector<std::vector<int>>> satisfaccion_por_empleado_dia_turno_;
   std::vector<std::vector<unsigned>> minimo_empleados_por_dia_turno;
   std::vector<unsigned> descanso_minimo_empleado;

@@ -14,12 +14,14 @@
 
 InstanciaPlanificacionEmpleados::InstanciaPlanificacionEmpleados(const std::vector<std::string>& empleados,  
                                    const std::vector<std::string>& turnos, unsigned dias_a_planificar, 
+                                   unsigned dias_originales,
                                    const std::vector<std::vector<std::vector<int>>>& satisfaccion,
                                    const std::vector<std::vector<unsigned>>& minimo_empleados, 
                                    const std::vector<unsigned>& descansos) {
   empleados_ = empleados;
   turnos_ = turnos;
   dias_a_planificar_ = dias_a_planificar;
+  dias_originales_ = dias_originales;
   minimo_empleados_por_dia_turno = minimo_empleados;
   descanso_minimo_empleado = descansos;
   satisfaccion_por_empleado_dia_turno_ = satisfaccion;

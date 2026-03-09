@@ -72,10 +72,12 @@ std::vector<Instancia*> AlgoritmoAproximadoPlanificacion::Divide(Instancia* entr
   const std::vector<std::string>& nombres_empleados = entrada_procesada->GetNombresEmpleados();
   const std::vector<std::string>& nombres_turnos = entrada_procesada->GetNombresTurnos();
   const std::vector<unsigned>& descansos = entrada_procesada->GetDescansoEmpleados();
+  const unsigned dias_originales = entrada_procesada->GetCantidadDiasOriginales();
   InstanciaPlanificacionEmpleados* primera_instancia = new InstanciaPlanificacionEmpleados(
       nombres_empleados,
       nombres_turnos, 
       dias_izquierda,
+      dias_originales,
       satisfaccion_izq,
       min_empleados_izq,
       descansos);
@@ -83,6 +85,7 @@ std::vector<Instancia*> AlgoritmoAproximadoPlanificacion::Divide(Instancia* entr
       nombres_empleados,
       nombres_turnos, 
       dias_derecha,
+      dias_originales,
       satisfaccion_dcha,
       min_empleados_dcha,
       descansos);
@@ -160,21 +163,33 @@ Solucion* AlgoritmoAproximadoPlanificacion::Combine(std::vector<Solucion*> soluc
       dias_trabajados_empleado_fusion,
       solucion_izq->GetNombresTurnos(),
       cantidad_dias_fusion,
+      solucion_izq->GetCantidadDiasOriginales(),
       satisfaccion_fusion,
       min_empleados_fusion,
       solucion_izq->GetDescansosEmpleados());
-  // Restauramos las reestricciones globales, que son los días mínimos de descanso de cada empleado.
-  for (size_t empleado{0}; empleado < cantidad_empleados_fusion; ++empleado) {
-    unsigned cantidad_dias_descanso = cantidad_dias_fusion - solucion_fusionada->DiasTrabajadosEmpleado(empleado);
-    unsigned dias_minimos = solucion_fusionada->DiasMinimosDescansoEmpleado(empleado);
-    while (cantidad_dias_descanso < dias_minimos) {
-      // Eliminamos el día con peor satisfacción del empleado, esto no es tan bueno
-      // porque podemos romper la cantidad mínima de empleados por turno.
-      std::pair<unsigned, unsigned> peor_turno_empleado = EncontrarPeorDiaTrabajado(empleado, solucion_fusionada);
-      solucion_fusionada->LiberarTrabajoTurno(peor_turno_empleado.first, peor_turno_empleado.second, empleado);
-      std::cout << "Desansados: " << cantidad_dias_descanso << "  Minimos: " << dias_minimos << std::endl;
-      std::cout << peor_turno_empleado.first << " " << peor_turno_empleado.second << " " << empleado << "\n";
-      ++cantidad_dias_descanso;
+
+  // Restauramos las reestricciones globales, que son los días mínimos de descanso de cada empleado,
+  // solo si la cantidad de dias de la fusión es igual a la cantidad de días originales.
+  if (cantidad_dias_fusion >= solucion_fusionada->GetCantidadDiasOriginales()) {
+    for (size_t empleado{0}; empleado < cantidad_empleados_fusion; ++empleado) {
+      unsigned cantidad_dias_descanso = cantidad_dias_fusion - solucion_fusionada->DiasTrabajadosEmpleado(empleado);
+      unsigned dias_minimos = solucion_fusionada->DiasMinimosDescansoEmpleado(empleado);
+      while (cantidad_dias_descanso < dias_minimos) {
+        std::pair<unsigned, unsigned> peor_turno = EncontrarPeorDiaTrabajdoNoMinimo(empleado, solucion_fusionada);
+        if (peor_turno.first == -1) {
+          // No existe turno para ese empleado que tenga empleados sobrantes.
+          break;
+        }
+        solucion_fusionada->LiberarTrabajoTurno(peor_turno.first, peor_turno.second, empleado);
+        ++cantidad_dias_descanso;
+      }
+      while (cantidad_dias_descanso < dias_minimos) {
+        // Eliminamos el día con peor satisfacción del empleado, esta vez sin tener en cuenta
+        // los días mínimos de los turnos, pues el paso anterior eliminó todos los sobrantes.
+        std::pair<unsigned, unsigned> peor_turno = EncontrarPeorDiaTrabajado(empleado, solucion_fusionada);
+        solucion_fusionada->LiberarTrabajoTurno(peor_turno.first, peor_turno.second, empleado);
+        ++cantidad_dias_descanso;
+      }
     }
   }
 
@@ -185,14 +200,40 @@ Solucion* AlgoritmoAproximadoPlanificacion::Combine(std::vector<Solucion*> soluc
   return solucion_fusionada;
 }
 
+ std::pair<int, int> AlgoritmoAproximadoPlanificacion::EncontrarPeorDiaTrabajdoNoMinimo(
+      unsigned empleado, 
+      SolucionPlanificacionEmpleados* solucion) {
+  // Necesitamos poder representar si no existe ese día y turno que cumpla las condiciones,
+  // por lo que el pair es de int y no de unsigned, -1 en cualquiera de los valores significa,
+  // que no existe ese día y turno.
+  std::pair<int, int> peor_dia_turno{-1, -1}; 
+  float peor_satisfaccion{std::numeric_limits<float>::infinity()};
+  // Buscamos el día y turno que tenga empleados sobrantes donde trabaje el empleado, 
+  // y que tenga la peor satisfacción para este. 
+  for (size_t dia{0}; dia < solucion->GetCantidadDias(); ++dia) {
+    for (size_t turno{0}; turno < solucion->GetCantidadTurnos(); ++turno) {
+      if (solucion->TrabajaEmpleadoDiaTurno(empleado, dia, turno) && 
+          solucion->EmpleadosTurno(dia, turno) > solucion->GetMinimoEmpleados(dia, turno)) {
+
+        if (solucion->GetSatisfaccion(empleado, dia, turno) < peor_satisfaccion) {
+          peor_satisfaccion = solucion->GetSatisfaccion(empleado, dia, turno);
+          peor_dia_turno = std::pair<unsigned, unsigned>(dia, turno);
+        }
+        // No puede trabajar más de un turno en un día así que no tiene sentido seguir buscando aquí.
+        break;
+      }
+    }
+  }
+
+  return peor_dia_turno;
+}
+
 std::pair<unsigned, unsigned> AlgoritmoAproximadoPlanificacion::EncontrarPeorDiaTrabajado(unsigned empleado, 
                                                                      SolucionPlanificacionEmpleados* solucion) {
-  // Se podria hacer que devolviera un vector con los dias-turno ordenados de peor a mejor,
-  // de esta forma se podria priorizar quitar los peores días que sí que tengan la cantidad
-  // mínima de empleados, pero complicaría el combine.
+  // Se busca el día y turno con peor satisfacción en el que trabaje el empleado,
+  // esta vez sin tener en cuenta la cantidad mímina de empleados para ese turno.
   std::pair<unsigned, unsigned> peor_dia_turno{0, 0};
   float peor_satisfaccion{std::numeric_limits<float>::infinity()};
-
   for (size_t dia{0}; dia < solucion->GetCantidadDias(); ++dia) {
     for (size_t turno{0}; turno < solucion->GetCantidadTurnos(); ++turno) {
       if (solucion->TrabajaEmpleadoDiaTurno(empleado, dia, turno)) {
@@ -205,6 +246,7 @@ std::pair<unsigned, unsigned> AlgoritmoAproximadoPlanificacion::EncontrarPeorDia
       }
     }
   }
+
   return peor_dia_turno;
 }
 

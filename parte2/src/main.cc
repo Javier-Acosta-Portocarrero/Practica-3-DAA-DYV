@@ -26,16 +26,13 @@ int main() {
 
   CargaInstanciaPlanificacion* carga_instancias = new CargaInstanciaPlanificacionJson(ruta_fichero);
   InstanciaPlanificacionEmpleados* entrada = carga_instancias->Load();
-  std::cout << "Hola 2\n";
 
   Algoritmo* resuelve_casos_dia = new AlgoritmoVorazPlanificacionDia();
   Algoritmo* estrategia_planificacion = new AlgoritmoAproximadoPlanificacion(resuelve_casos_dia);
   PlanificadorEmpleados planificador(estrategia_planificacion);
-  std::cout << "Hola 3\n";
-  
+
   SolucionPlanificacionEmpleados* solucion = planificador.Planificar(entrada);
 
-  std::cout << "Hola 4\n";
   std::cout << "\nIntroduce el fichero de salida donde se volcarán los resultados:\n";
   std::string ruta_fichero_salida{"salida_predeterminada.txt"};
   std::cin >> ruta_fichero_salida;
