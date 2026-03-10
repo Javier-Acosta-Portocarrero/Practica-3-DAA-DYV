@@ -26,6 +26,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <chrono>
+#include <fstream>
 
 int main() {
   // Inicializamos la semilla con la hora actual del ordenador
@@ -104,9 +105,27 @@ int main() {
     delete entrada_aux;
     delete solucion_aux;
   } else if (opcion == 3) {
+    std::cout << "Quieres almacenar los resultados en un fichero? (s/n): ";
+    char almacenar_fichero{'n'};
+    std::cin >> almacenar_fichero;
+    std::ostream* flujo_salida = nullptr;
+    std::ofstream flujo_fichero_salida;
+    if (almacenar_fichero == 's' || almacenar_fichero == 'S') {
+      std::string ruta_fichero{"resultados.txt"};
+      std::cout << "Introduce la ruta del fichero:  ";
+      std::cin >> ruta_fichero;
+      flujo_fichero_salida.open(ruta_fichero);
+      if (!flujo_fichero_salida.is_open()) {
+        std::cerr << "No se pudo abrir el fichero para escribir, abortando ejecución.";
+        return 1;
+      }
+      flujo_salida = &flujo_fichero_salida;
+    } else {
+      flujo_salida = &std::cout;
+    }
     std::vector<size_t> dimensiones{10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 
                                     300, 400, 500, 600 ,700, 800, 900, 1000};
-    std::cout << "Dimension     Tiempo MergeSort     Tiempo QuickSort\n";
+    *flujo_salida << "Dimension     Tiempo MergeSort     Tiempo QuickSort\n";
     for (size_t dimension : dimensiones) {
       entrada_aux = new InstanciaVector(GenerarVectorAleatorio(dimension));
       // Para MergeSort
@@ -141,7 +160,7 @@ int main() {
       duracion_total_quick /= num_iteraciones;
 
       // Imprimos los resultados de ambos algoritmos para esta dimensión.
-      std::cout << "  " << dimension <<  "           "   << duracion_total_merge << "           " 
+      *flujo_salida << "  " << dimension <<  "           "   << duracion_total_merge << "           " 
                 << duracion_total_quick << '\n';
     }
   } else {
